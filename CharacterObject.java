@@ -15,7 +15,12 @@ public class CharacterObject {
 	ArrayList<BufferedImage> sprite;
 	ArrayList<BufferedImage> defaultImg;
 	protected ImageLoader imgLoader;
-	Rectangle hitbox;
+	//Rectangle hitbox;
+	
+	//NEW
+	int[] xHitbox = new int[4];
+	int[] yHitbox = new int[4];
+	Polygon hitbox;
 	
 	public CharacterObject(){
 		this.width = 100;
@@ -24,7 +29,9 @@ public class CharacterObject {
 		this.imgLoader = new ImageLoader();
 		this.defaultImg = new ArrayList<BufferedImage>();
 		this.sprite=defaultImg;
-		this. hitbox = new Rectangle(position.x, position.y,width,height);
+		//this. hitbox = new Rectangle(position.x, position.y,width,height);
+		//NEW
+		this.hitbox = new Polygon(xHitbox, yHitbox, 4);
 	}
 	
 	public int getX(){

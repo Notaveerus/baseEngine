@@ -101,14 +101,9 @@ public class GameWindow extends JFrame {
 		else{
 			attack = new Polygon();
 		}
-		
 		Graphics g = getGraphics();
 		((Graphics2D) g).draw(attack);
 		System.out.println(player.position);
-		
-		//NEW
-		Polygon hitbox = player.hitbox;
-		((Graphics2D) g).draw(hitbox);
 		
 		
 		

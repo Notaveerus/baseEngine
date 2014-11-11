@@ -64,13 +64,30 @@ public class Player extends CharacterObject{
 		else{
 			sprite = defaultImg;
 		}		
+		//NEW SHIT RIGHTE HERE
+		int xCentre = position.x + (width/2);
+		int yCentre = position.y + (height/2);
+		double pythag = (width*width + (height/2)*(height/2))/8;
+		double radius = Math.sqrt(pythag);
+		
+		double angle = calcDirection(mousePosition);
+		
+		xHitbox[0] = xCentre - (int) (Math.cos(angle + Math.toRadians(45))* radius);
+		xHitbox[1] = xCentre + (int) (Math.sin(angle + Math.toRadians(45))* radius);
+		xHitbox[2] = xCentre + (int) (Math.cos(angle + Math.toRadians(45))* radius);
+		xHitbox[3] = xCentre - (int) (Math.sin(angle + Math.toRadians(45))* radius);
+		yHitbox[0] = yCentre - (int) (Math.sin(angle + Math.toRadians(45)) * radius);
+		yHitbox[1] = yCentre - (int) (Math.cos(angle + Math.toRadians(45)) * radius);
+		yHitbox[2] = yCentre + (int) (Math.sin(angle + Math.toRadians(45)) * radius);
+		yHitbox[3] = yCentre + (int) (Math.cos(angle + Math.toRadians(45)) * radius);
+		hitbox = new Polygon(xHitbox, yHitbox, 4);
 		
 		this.mousePosition = mousePosition;
-		double angle = calcDirection(mousePosition);
-		int x =  (int) (position.x + (Math.cos((angle)) * (rotatePoint.x - position.x)- Math.sin((angle)) * (rotatePoint.y - position.y)));
-		int y =  (int) (position.y + (Math.sin((angle)) * (rotatePoint.x - position.x)- Math.cos((angle)) * (rotatePoint.y - position.y)));
-		rotatePoint = new Point(x,y);
-		System.out.println(rotatePoint);
+		
+		//int x =  (int) (position.x + (Math.cos((angle)) * (rotatePoint.x - position.x)- Math.sin((angle)) * (rotatePoint.y - position.y)));
+		//int y =  (int) (position.y + (Math.sin((angle)) * (rotatePoint.x - position.x)- Math.cos((angle)) * (rotatePoint.y - position.y)));
+		//rotatePoint = new Point(x,y);
+		System.out.println(angle);
 	}
 	
 	
