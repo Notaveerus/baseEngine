@@ -86,7 +86,8 @@ public class GameWindow extends JFrame {
                 insets.top + windowHeight + insets.bottom);
 		
 		player = new Player(windowWidth, windowHeight, input); 
-		animCount =0;
+		animCount =0;		
+		
 	}
 	
 	
