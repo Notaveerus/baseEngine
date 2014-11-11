@@ -7,6 +7,9 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.imageio.ImageIO;
 
 
@@ -20,7 +23,7 @@ public class Player extends CharacterObject{
 	int imgNum;	
 	float xDistance;
 	float yDistance;
-	Point rotatePoint;
+	boolean canAttack;
 	
 	public Player(int windowWidth, int windowHeight, InputHandler input){		
 		this.sprite=defaultImg;
@@ -29,12 +32,13 @@ public class Player extends CharacterObject{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		rotatePoint = position;
+
 		
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
 		this.input = input;
 		this.identity = new AffineTransform();		
+		canAttack = true;
 		
 	}
 	
@@ -42,8 +46,10 @@ public class Player extends CharacterObject{
 	
 	public void update(Point mousePosition, float interpolation){		
 		@SuppressWarnings("unused")
-		String facing = getFacing(mousePosition);
 		//use as anim key once implemented
+		String facing = getFacing(mousePosition);
+		
+		hitbox = calculateHitbox(position.x, position.y, width, height);
 		if(input.isKeyDown(KeyEvent.VK_D)){			
 			position.x += 5*interpolation;
 			sprite = imgLoader.getAnimation("w");
@@ -64,10 +70,19 @@ public class Player extends CharacterObject{
 		else{
 			sprite = defaultImg;
 		}		
-		//NEW SHIT RIGHTE HERE
-		int xCentre = position.x + (width/2);
-		int yCentre = position.y + (height/2);
-		double pythag = (width*width + (height/2)*(height/2))/8;
+		
+		
+		
+		this.mousePosition = mousePosition;
+		
+		
+		
+	}
+	
+	Polygon calculateHitbox(int x, int y, int width, int height){
+		int xCentre = x + (width/2);
+		int yCentre = y + (height/2);
+		double pythag = (width*width + height*height)/8;
 		double radius = Math.sqrt(pythag);
 		
 		double angle = calcDirection(mousePosition);
@@ -80,17 +95,8 @@ public class Player extends CharacterObject{
 		yHitbox[1] = yCentre - (int) (Math.cos(angle + Math.toRadians(45)) * radius);
 		yHitbox[2] = yCentre + (int) (Math.sin(angle + Math.toRadians(45)) * radius);
 		yHitbox[3] = yCentre + (int) (Math.cos(angle + Math.toRadians(45)) * radius);
-		hitbox = new Polygon(xHitbox, yHitbox, 4);
-		
-		this.mousePosition = mousePosition;
-		
-		//int x =  (int) (position.x + (Math.cos((angle)) * (rotatePoint.x - position.x)- Math.sin((angle)) * (rotatePoint.y - position.y)));
-		//int y =  (int) (position.y + (Math.sin((angle)) * (rotatePoint.x - position.x)- Math.cos((angle)) * (rotatePoint.y - position.y)));
-		//rotatePoint = new Point(x,y);
-		System.out.println(angle);
+		return new Polygon(xHitbox, yHitbox, 4);
 	}
-	
-	
 	
 
 	
@@ -111,38 +117,24 @@ public class Player extends CharacterObject{
 		
 	}
 	
-	public Polygon action() {
-		sprite = imgLoader.getAnimation("a");
-		int xPath = this.mousePosition.x - position.x;
-		int yPath = this.mousePosition.y - position.y;
-		double angle = calcDirection(mousePosition);
-		
-		int[] xPoly = new int[4];
-		int[] yPoly = new int[4];
-		xPoly[0] = position.x;
-		yPoly[0] = position.y;
-		int x2 = (int) (position.x - 50*Math.cos(angle));
-		int y2 = (int) (position.x - 50*Math.cos(angle));
-		xPoly[1] = x2;
-		yPoly[1] = y2;
-		
-		int x3 = (int) (x2 - width*Math.cos(90));
-		int y3 = (int) (y2 - width*Math.cos(90));
-		xPoly[2] = x3;
-		yPoly[2] = y3;
-		
-		int x4 = (int) (x3 - 50*Math.cos(angle));
-		int y4 = (int) (y3 - 50*Math.cos(angle));
-		xPoly[3] = x4;
-		yPoly[3] = y4;
-		
-		
-	
-		
-		Polygon attack = new Polygon(xPoly,yPoly,xPoly.length);
-		
-		return attack;
-		
+	public void action() {
+		if(canAttack){			
+			attack = calculateHitbox(xHitbox[0], yHitbox[0], width, 20);
+			canAttack = false;
+			Timer timer = new Timer();
+			 timer.schedule(new TimerTask(){
+				@Override
+				public void run() {
+					attack = null;				
+				}			 
+			 },100);
+		}
+		Timer attackDelay = new Timer();
+		attackDelay.schedule(new TimerTask(){
+			public void run(){
+				canAttack = true;
+			}
+		}, 2000);
 	}
 	
 	

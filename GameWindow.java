@@ -94,25 +94,13 @@ public class GameWindow extends JFrame {
 	//Check for input, move things, etc.
 	void update(float interpolation){
 		player.update(mousePosition, interpolation);
-		Polygon attack;
 		if(mouseClick != null){
-			attack = player.action();
-		}
-		else{
-			attack = new Polygon();
-		}
-		
-		Graphics g = getGraphics();
-		((Graphics2D) g).draw(attack);
-		System.out.println(player.position);
-		
-		//NEW
-		Polygon hitbox = player.hitbox;
-		((Graphics2D) g).draw(hitbox);
-		
-		
+			player.action();
+		}		
 		
 	}
+	
+	
 	
 	//Draws everything
 	void draw(){
@@ -131,7 +119,12 @@ public class GameWindow extends JFrame {
 		AffineTransform trans = new AffineTransform();
 		bbg.setColor(Color.BLACK);
 		bbg.drawLine(player.getX(), player.getY(), mouseX, mouseY);
-		bbg.drawLine(player.rotatePoint.x, player.rotatePoint.y, mouseX, mouseY);
+		
+		bbg.draw(player.hitbox);
+		if(player.attack != null){
+			bbg.draw(player.attack);
+		}
+			
 		trans.rotate(Math.toRadians(0),0,0);
 		bbg.rotate(rotationAngle, player.getX()+(player.getWidth()/2), player.getY()+(player.getHeight()/2));		
 		bbg.drawImage(currSprite, player.getX(),player.getY(),player.getWidth(),player.getHeight(), this);		

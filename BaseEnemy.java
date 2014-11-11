@@ -2,6 +2,7 @@ package baseEngine;
 
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.geom.Area;
 
 
 
@@ -38,9 +39,10 @@ public class BaseEnemy extends CharacterObject{
 		}
 	}
 
-	boolean checkPathIntersection(Polygon intersect) {
-		Area pathArea = new Area(curPath); 
-		if(curPath.intersects(intersect)){
+	boolean checkPathIntersection(Polygon object) {
+		Area pathArea = new Area(curPath);
+		Area objectArea = new Area(object);
+		if(pathArea.intersect(objectArea)){
 			
 		}
 		return false;
