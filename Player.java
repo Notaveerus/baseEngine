@@ -119,22 +119,26 @@ public class Player extends CharacterObject{
 	
 	public void action() {
 		if(canAttack){			
-			attack = calculateHitbox(xHitbox[0], yHitbox[0], width, 20);
+			attack = calculateHitbox(xHitbox[0], yHitbox[0], width, 40);
 			canAttack = false;
 			Timer timer = new Timer();
 			 timer.schedule(new TimerTask(){
 				@Override
 				public void run() {
-					attack = null;				
+					attack = null;
+					
 				}			 
-			 },100);
+			 },500);
+			 ;
 		}
-		Timer attackDelay = new Timer();
-		attackDelay.schedule(new TimerTask(){
-			public void run(){
-				canAttack = true;
-			}
-		}, 2000);
+		if(canAttack == false){
+			Timer attackDelay = new Timer();
+			attackDelay.schedule(new TimerTask(){
+				public void run(){
+					canAttack = true;
+				}
+			}, 1000);
+		}
 	}
 	
 	

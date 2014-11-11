@@ -15,7 +15,6 @@ public class GameWindow extends JFrame {
 	int windowWidth;
 	int windowHeight;
 	Player player;
-	int fps;
 	BufferedImage backBuffer;
 	Insets insets;
 	InputHandler input;
@@ -30,7 +29,6 @@ public class GameWindow extends JFrame {
 		this.isRunning = true;		
 		this.windowWidth = 1280;
 		this.windowHeight = 720;		
-		this.fps = 30;
 		this.backBuffer = new BufferedImage(this.windowWidth, this.windowHeight, BufferedImage.TYPE_INT_RGB);
 		input = new InputHandler(this);
 		
@@ -78,7 +76,7 @@ public class GameWindow extends JFrame {
 	//Set everything required for the game to run
 	void initialize(){
 		setTitle("Game Window");
-		setUndecorated(true);
+		setUndecorated(false);
 		
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -91,12 +89,17 @@ public class GameWindow extends JFrame {
 		animCount =0;
 	}
 	
+	
+	
 	//Check for input, move things, etc.
 	void update(float interpolation){
 		player.update(mousePosition, interpolation);
 		if(mouseClick != null){
 			player.action();
-		}		
+		}
+		if(player.attack!=null){
+			player.attack = player.calculateHitbox(player.xHitbox[0], player.yHitbox[0], player.width, 40);
+		}
 		
 	}
 	

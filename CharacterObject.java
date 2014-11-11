@@ -30,8 +30,6 @@ public class CharacterObject {
 		this.sprite=defaultImg;
 		yHitbox = new int[4];
 		xHitbox = new int[4];
-		
-		//NEW
 		this.hitbox = new Polygon(xHitbox, yHitbox, 4);
 	}
 	
@@ -106,9 +104,7 @@ public class CharacterObject {
 	}
 	
 	public void action() {
-		sprite = imgLoader.getAnimation("a");
-		
-		
+		sprite = imgLoader.getAnimation("a");		
 		
 	}
 }
